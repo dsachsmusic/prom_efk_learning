@@ -10,6 +10,20 @@ curl latest version of minikube binary (from official source?) ...
 Install minikube
 - sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
+Install kubectl
+- because minikube doesn't include per se (you can run "minikube kubectl...", but that is less convenient syntax...and also only works for minikube...its not the kubectl that we'd use with other clusters launchers...)
+- curl -LO "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+- chmod +x kubectl
+- sudo mv kubectl /usr/local/bin/
+
+Confirm kubectl is installed and path picks it up right
+- which kubectl
+  - should return /usr/local/bin/kubectl
+
 #Start minikube
-minikube start --driver=docker --cpus=4 --memory=8g
+start it 
+- minikube start --driver=docker --cpus=4 --memory=8g
+
+set kubectl context to minikube
+- kubectl config use-context minikube
 
