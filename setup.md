@@ -1,4 +1,4 @@
-#Install minikube
+# Install minikube
 Note on environment
 - This is on WSL, where docker desktop is installed on Windows...
 - We'll install and run Minikube inside WSL, using the --driver=docker option.
@@ -20,10 +20,10 @@ Confirm kubectl is installed and path picks it up right
 - which kubectl
   - should return /usr/local/bin/kubectl
 
-#Install helm
+# Install helm
 - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
   - this script installs helm into /usr/local/bin
-#Start minikube
+# Start minikube
 start it 
 - minikube start --driver=docker --cpus=4 --memory=2200mb
   - note: if have more resources, could increase memory(?)
@@ -33,13 +33,13 @@ set kubectl context to minikube
 - btw, helm knows what kubernetes cluster to work on based on this
 - btw....context is defined in the file ~/.kube/config (use-context sets this(?)
 
-#Helm repo, etc. type prep
+# Helm repo, etc. type prep
 Add promethius-community repo to local helm
 - helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 Update helm repos installed
 - helm repo update
 
-#Install prom-stack
+# Install prom-stack
 - helm install kube-prom-stack prometheus-community/kube-prometheus-stack
 - Note: Prom-stack includes
   - Prometheus (metrics collection)
