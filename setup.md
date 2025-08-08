@@ -55,3 +55,27 @@ Update helm repos installed
   - helm template kube-prom-stack prometheus-community/kube-prometheus-stack > prometheus-stack-not-used-just-for-viewing.yaml
 - review install messages (tells you how to access alert manager, grafana, etc)
   - helm get notes kube-prom-stack
+
+# port-forward, or expose grafana to local host
+- Note: by default, kube-prom-stack doesn't expose grafana...it sets grafana's networking with/as as clusterIP (not a nodeport or loadbalancer)...for whatever reason...can either do an ephermeral port-forward approach, or, override the default of kube-prom-stack...changing the default from clusterIP to, say, nodeport
+  - port forward...manual way...one of the following should work:
+    - kubectl get pods -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=kube-prom-stack"
+      - then kubectl port-forward NAME-from-previous-command 3000:3000
+    - kubectl port-forward svc/kube-prom-stack-grafana 3000:80 
+  - minikube shortcut way 
+    - minikube service kube-prom-stack-grafana --url
+  - override the defaults...use one of the following commands (syntax not included):
+    - kubectl patch (patches/changes the deployment)
+    - helm upgrade (changes the helm values)
+
+# get admin password for grafana (to log in via exposed web UI) ...
+  - note: username is admin
+  - kubectl get secret kube-prom-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode
+
+# install jaeger
+- helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
+- helm repo update
+- helm install jaeger jaegertracing/jaeger
+- note: to access jaeger web ui...do:
+  - minikube service jaeger-query --url
+    - note: as of 8-7-2025...this doesn't seem to be working...and and kubernetes api is crashing
